@@ -1,37 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-import { Formik } from "formik";
+import { loginAPI } from "../../services/auth";
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  console.log("here!!!");
 
-  let something = "name";
-
-  const [heading, setHeading] = useState("first heading");
-
-  const login = () => {};
-
-  useEffect(() => {
-    console.log("here in useEffect!!");
-    return ()=>{
-      // remove evet listener
+  const login = async () => {
+    try {
+      const resp = await loginAPI({
+        email: email,
+        password: password,
+      });
+      localStorage.setItem("token", resp.token);
+      navigate("/data");
+    } catch (error) {
+      console.log("error :>> ", error);
     }
-  }, [heading]);
+  };
 
   return (
     <>
-    <h1>{heading}</h1>
-    <input
-      type={"text"}
-      value={heading}
-      onChange={(e) => {
-        something = e.target.value;
-        setHeading(e.target.value);
-      }}
-    />
       <h1>Login</h1>
       <input
         type={"email"}
